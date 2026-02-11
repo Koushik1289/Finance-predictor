@@ -94,7 +94,7 @@ def test_postgres_module_full():
 
     try:
         get_connection()
-    except:
+    except Exception:
         pass
 
     assert True

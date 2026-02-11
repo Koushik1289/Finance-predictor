@@ -87,7 +87,7 @@ def test_metrics_service_full():
 
         get_metrics()
 
-    except:
+    except Exception:
         pass
 
     assert True
