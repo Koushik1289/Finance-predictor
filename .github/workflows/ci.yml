@@ -52,7 +52,7 @@ jobs:
       # ===============================
       - name: Run Tests
         run: |
-          pytest --cov=app --cov=ml --cov=pipeline --cov-report=term --cov-fail-under=60
+          pytest --cov --cov-fail-under=60
 
       # ===============================
       # Build Docker Image
