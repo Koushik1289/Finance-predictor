@@ -1,0 +1,91 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# =========================
+# ML Artifacts
+# =========================
+artifacts/
+*.pkl
+*.joblib
+*.h5
+*.model
+*.png
+*.jpg
+*.jpeg
+
+# =========================
+# Coverage & Testing
+# =========================
+.coverage
+.coverage.*
+htmlcov/
+pytest_cache/
+.cache/
+.tox/
+
+# =========================
+# Environment Variables
+# =========================
+
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+
+# =========================
+# Database
+# =========================
+*.sqlite3
+*.db
+
+# =========================
+# IDE Files
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+*.tar
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.bak
+*.old
+
+# =========================
+# Build Files
+# =========================
+build/
+dist/
+*.egg-info/
+.eggs/
