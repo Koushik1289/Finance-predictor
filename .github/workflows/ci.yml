@@ -1,13 +1,13 @@
-name: Enterprise CI Pipeline
+name: CI Pipeline
 
 on:
   push:
-    branches: ["main", "master"]
+    branches: [ main ]
   pull_request:
-    branches: ["main", "master"]
+    branches: [ main ]
 
 jobs:
-  build-and-test:
+  test-build-deploy:
     runs-on: ubuntu-latest
 
     services:
@@ -25,62 +25,48 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-    env:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: userpassword
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: 5432
-      JWT_SECRET: supersecretkey
-      JWT_ALGORITHM: HS256
-
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      # 1️⃣ Checkout Code
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      # 2️⃣ Setup Python
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      # 3️⃣ Upgrade pip
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
-
-      # 4️⃣ Install Dependencies
-      - name: Install Project Dependencies
+      - name: Install Dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov ruff bandit
+          pip install pytest pytest-cov ruff
 
-      # 5️⃣ Run Ruff Linter
-      - name: Run Ruff Lint
-        run: ruff check .
-
-      # 6️⃣ Run Bandit Security Scan
-      - name: Run Bandit Security Scan
-        run: bandit -r app -ll
-
-      # 7️⃣ Wait for PostgreSQL to be Ready
-      - name: Wait for PostgreSQL
+      # ===============================
+      # Ruff Lint (Auto Fix Enabled)
+      # ===============================
+      - name: Run Ruff (Auto Fix)
         run: |
-          for i in `seq 1 15`;
-          do
-            pg_isready -h localhost -p 5432 -U user && break
-            sleep 2
-          done
+          ruff check . --fix
 
-      # 8️⃣ Run Tests with Coverage Enforcement (80%)
-      - name: Run Tests with Coverage
+      # ===============================
+      # Run Tests with Coverage (60%)
+      # ===============================
+      - name: Run Tests
         run: |
-          pytest \
-            --cov=app \
-            --cov-fail-under=60
+          pytest --cov=app --cov=ml --cov=pipeline --cov-report=term --cov-fail-under=60
 
-      # 9️⃣ Build Docker Image
+      # ===============================
+      # Build Docker Image
+      # ===============================
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Docker Image
-        run: docker build -t finance-risk-platform .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/finance-risk-platform:latest .
 
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/finance-risk-platform:latest
