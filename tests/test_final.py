@@ -35,7 +35,7 @@ def test_train_full_execution():
         df = preprocess(df)
         train_all(df)
 
-    except:
+    except Exception:
         pass
 
     assert True
@@ -68,7 +68,7 @@ def test_prediction_service_full():
 
         predict(sample)
 
-    except:
+    except Exception:
         pass
 
     assert True

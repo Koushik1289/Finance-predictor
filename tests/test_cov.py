@@ -8,7 +8,7 @@ def test_auth_module():
     try:
         from app.auth import create_access_token
         create_access_token({"user": "test"})
-    except:
+    except Exception:
         pass
     assert True
 
@@ -17,7 +17,7 @@ def test_postgres_module():
     try:
         from app.database.postgres import get_db
         get_db()
-    except:
+    except Exception:
         pass
     assert True
 
@@ -26,7 +26,7 @@ def test_metrics_service():
     try:
         from app.services.metrics_service import get_metrics
         get_metrics()
-    except:
+    except Exception:
         pass
     assert True
 
@@ -55,7 +55,7 @@ def test_prediction_service():
             "City_Tier": "Tier_1",
         }
         predict(sample)
-    except:
+    except Exception:
         pass
     assert True
 
@@ -64,7 +64,7 @@ def test_model_loader():
     try:
         from app.core.model_loader import load_model
         load_model()
-    except:
+    except Exception:
         pass
     assert True
 
@@ -100,7 +100,7 @@ def test_train_module():
 
         train_all(df)
 
-    except:
+    except Exception:
         pass
 
     assert True
